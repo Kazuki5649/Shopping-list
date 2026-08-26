@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家族の買い物リスト</title>
+ 
+<style>
+* {
+    box-sizing: border-box;
+}
+ 
+body {
+font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+max-width: 600px;
+margin: 0 auto;
+padding: 20px;
+background: #f5f5f5;
+}
+ 
+h1 {
+text-align: center;
+color: #333;
+}
+ 
+.input-area {
+display: flex;
+gap: 10px;
+margin-bottom: 20px;
+}
+ 
+input {
+flex: 1;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 8px;
+font-size: 16px;
+}
+ 
+button {
+padding: 12px 16px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+}
+ 
+.add-btn {
+background: #007aff;
+color: white;
+}
+ 
+ul {
+list-style: none;
+padding: 0;
+}
+ 
+li {
+background: white;
+padding: 12px;
+margin-bottom: 10px;
+border-radius: 8px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+ 
+.completed {
+text-decoration: line-through;
+color: gray;
+}
+ 
+.delete-btn {
+margin-left: auto;
+background: #ff3b30;
+color: white;
+}
+</style>
+</head>
+ 
+<body>
+ 
+<h1>🛒 家族の買い物リスト</h1>
+ 
+<div class="input-area">
+<input
+type="text"
+id="itemInput"
+placeholder="買うものを入力"
+maxlength="50"
+>
+<button class="add-btn" onclick="addItem()">追加</button>
+</div>
+ 
+<ul id="shoppingList"></ul>
+ 
+<script>
+let items = JSON.parse(localStorage.getItem('shoppingList')) || [];
+ 
+function saveItems() {
+localStorage.setItem(
+'shoppingList',
+JSON.stringify(items)
+);
+}
+ 
+function renderList() {
+const list = document.getElementById('shoppingList');
+list.innerHTML = '';
+ 
+items.forEach((item, index) => {
+const li = document.createElement('li');
+ 
+li.innerHTML = `
+<input
+type="checkbox"
+${item.checked ? 'checked' : ''}
+onchange="toggleItem(${index})"
+>
+ 
+<span class="${item.checked ? 'completed' : ''}">
+${item.name}
+</span>
+ 
+<button
+class="delete-btn"
+onclick="deleteItem(${index})"
+>
+削除
+</button>
+`;
+ 
+list.appendChild(li);
+});
+}
+ 
+function addItem() {
+const input = document.getElementById('itemInput');
+const name = input.value.trim();
+ 
+if (!name) return;
+ 
+items.push({
+name: name,
+checked: false
+});
+ 
+saveItems();
+renderList();
+ 
+input.value = '';
+input.focus();
+}
+ 
+function toggleItem(index) {
+items[index].checked = !items[index].checked;
+ 
+saveItems();
+renderList();
+}
+ 
+function deleteItem(index) {
+items.splice(index, 1);
+ 
+saveItems();
+renderList();
+}
+ 
+document
+.getElementById('itemInput')
+.addEventListener('keypress', function(e) {
+if (e.key === 'Enter') {
+addItem();
+}
+});
+ 
+renderList();
+</script>
+ 
+</body>
+</html>
