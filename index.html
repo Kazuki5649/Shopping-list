@@ -116,10 +116,11 @@
             font-weight: 500;
         }
 
-        .registered-by {
-            margin-top: 3px;
+        .item-details {
+            margin-top: 4px;
             color: #777777;
             font-size: 13px;
+            line-height: 1.5;
         }
 
         .completed .item-name {
@@ -127,7 +128,7 @@
             text-decoration: line-through;
         }
 
-        .completed .registered-by {
+        .completed .item-details {
             color: #aaaaaa;
         }
 
@@ -213,170 +214,4 @@
 
         let items = loadItems();
 
-        function loadItems() {
-            try {
-                const savedItems =
-                    localStorage.getItem(storageKey);
-
-                return savedItems
-                    ? JSON.parse(savedItems)
-                    : [];
-            } catch (error) {
-                return [];
-            }
-        }
-
-        function saveItems() {
-            localStorage.setItem(
-                storageKey,
-                JSON.stringify(items)
-            );
-        }
-
-        function renderList() {
-            const list =
-                document.getElementById("shoppingList");
-
-            const emptyMessage =
-                document.getElementById("emptyMessage");
-
-            list.innerHTML = "";
-
-            emptyMessage.style.display =
-                items.length === 0
-                    ? "block"
-                    : "none";
-
-            items.forEach(function (item, index) {
-                const listItem =
-                    document.createElement("li");
-
-                if (item.checked) {
-                    listItem.classList.add("completed");
-                }
-
-                const checkBox =
-                    document.createElement("input");
-
-                checkBox.type = "checkbox";
-                checkBox.className = "check-box";
-                checkBox.checked = item.checked;
-
-                checkBox.addEventListener(
-                    "change",
-                    function () {
-                        toggleItem(index);
-                    }
-                );
-
-                const itemInformation =
-                    document.createElement("div");
-
-                itemInformation.className =
-                    "item-information";
-
-                const itemName =
-                    document.createElement("div");
-
-                itemName.className = "item-name";
-                itemName.textContent = item.name;
-
-                const registeredBy =
-                    document.createElement("div");
-
-                registeredBy.className =
-                    "registered-by";
-
-                registeredBy.textContent =
-                    item.user
-                        ? "登録者：" + item.user
-                        : "登録者：未入力";
-
-                const deleteButton =
-                    document.createElement("button");
-
-                deleteButton.type = "button";
-                deleteButton.className = "delete-btn";
-                deleteButton.textContent = "削除";
-
-                deleteButton.addEventListener(
-                    "click",
-                    function () {
-                        deleteItem(index);
-                    }
-                );
-
-                itemInformation.appendChild(itemName);
-                itemInformation.appendChild(registeredBy);
-
-                listItem.appendChild(checkBox);
-                listItem.appendChild(itemInformation);
-                listItem.appendChild(deleteButton);
-
-                list.appendChild(listItem);
-            });
-        }
-
-        function addItem() {
-            const itemInput =
-                document.getElementById("itemInput");
-
-            const userInput =
-                document.getElementById("userInput");
-
-            const name = itemInput.value.trim();
-            const user = userInput.value;
-
-            if (name === "") {
-                alert("買うものを入力してください");
-                itemInput.focus();
-                return;
-            }
-
-            items.push({
-                name: name,
-                user: user,
-                checked: false
-            });
-
-            saveItems();
-            renderList();
-
-            itemInput.value = "";
-            itemInput.focus();
-        }
-
-        function toggleItem(index) {
-            items[index].checked =
-                !items[index].checked;
-
-            saveItems();
-            renderList();
-        }
-
-        function deleteItem(index) {
-            items.splice(index, 1);
-
-            saveItems();
-            renderList();
-        }
-
-        document
-            .getElementById("addButton")
-            .addEventListener("click", addItem);
-
-        document
-            .getElementById("itemInput")
-            .addEventListener(
-                "keydown",
-                function (event) {
-                    if (event.key === "Enter") {
-                        addItem();
-                    }
-                }
-            );
-
-        renderList();
-    </script>
-</body>
-</html>
+        function 
