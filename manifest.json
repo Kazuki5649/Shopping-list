@@ -1,26 +1,12 @@
 {
     "name": "山岸家 買い物メモ",
     "short_name": "山岸家買い物",
-    "description": "山岸家で共有する買い物リスト",
+    "description": "山岸家で使う買い物リスト",
     "lang": "ja",
     "start_url": "./",
     "scope": "./",
     "display": "standalone",
     "orientation": "portrait-primary",
     "background_color": "#f3f8fc",
-    "theme_color": "#4aa3df",
-    "icons": [
-        {
-            "src": "./icon-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "./icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
-        }
-    ]
+    "theme_color": "#4aa3df"
 }
