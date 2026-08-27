@@ -8,14 +8,20 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta name="theme-color" content="#d71920">
+    <meta
+        name="theme-color"
+        content="#4aa3df"
+    >
 
     <meta
         name="description"
         content="山岸家で共有する買い物メモ"
     >
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
 
     <meta
         name="apple-mobile-web-app-status-bar-style"
@@ -31,21 +37,22 @@
 
     ./icon-192.png
 
-    ./icon-192.png
+    <link
+        rel="apple-touch-icon"
+        href="./icon-192.png"
+    >
 
     <title>山岸家 買い物メモ</title>
 
-    <style>
-　　　　　 :root {
-　　　　　　 --main-red: #4aa3df;
-　　　　　　 --dark-red: #2e85c0;
-　　　　　　 --light-red: #e8f5ff;
-            --background: #f5f5f5;
+    <           --dark-blue: #2e85c0;
+            --light-blue: #e8f5ff;
+            --very-light-blue: #f4faff;
+            --background: #f3f8fc;
             --card: #ffffff;
             --text: #333333;
             --sub-text: #777777;
-            --border: #dddddd;
-            --delete: #666666;
+            --border: #d6e2ea;
+            --delete: #687782;
         }
 
         * {
@@ -64,8 +71,16 @@
                 env(safe-area-inset-top)
                 14px
                 env(safe-area-inset-bottom);
-            background-color: var(--background);
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #edf8ff 0,
+                    var(--background) 250px
+                );
+
             color: var(--text);
+
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -78,9 +93,19 @@
         .header {
             margin: 0 -14px 18px;
             padding: 18px 14px;
-            background-color: var(--main-red);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #67b9ec,
+                    var(--main-blue)
+                );
+
             color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+
+            box-shadow:
+                0 2px 8px
+                rgba(46, 133, 192, 0.25);
         }
 
         .header-content {
@@ -88,6 +113,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+
             width: 100%;
             max-width: 680px;
             margin: 0 auto;
@@ -97,10 +123,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
             width: 44px;
             height: 44px;
+
             border-radius: 50%;
             background-color: #ffffff;
+
+            box-shadow:
+                0 2px 5px
+                rgba(0, 0, 0, 0.12);
+
             font-size: 25px;
         }
 
@@ -112,7 +145,7 @@
 
         .subtitle {
             margin: 5px 0 0;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.95);
             text-align: center;
             font-size: 13px;
         }
@@ -126,10 +159,17 @@
         .input-card {
             margin-bottom: 18px;
             padding: 16px;
-            border-top: 4px solid var(--main-red);
+
+            border-top:
+                4px solid
+                var(--main-blue);
+
             border-radius: 12px;
             background-color: var(--card);
-            box-shadow: 0 2px 9px rgba(0, 0, 0, 0.09);
+
+            box-shadow:
+                0 2px 9px
+                rgba(70, 130, 170, 0.12);
         }
 
         .input-title {
@@ -140,7 +180,13 @@
 
         .input-area {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 110px 120px auto;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                110px
+                120px
+                auto;
+
             gap: 8px;
         }
 
@@ -149,7 +195,11 @@
             width: 100%;
             min-width: 0;
             padding: 12px;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid
+                var(--border);
+
             border-radius: 8px;
             background-color: #ffffff;
             color: var(--text);
@@ -158,8 +208,11 @@
 
         input[type="text"]:focus,
         select:focus {
-            border-color: var(--main-red);
-            outline: 3px solid rgba(215, 25, 32, 0.14);
+            border-color: var(--main-blue);
+
+            outline:
+                3px solid
+                rgba(74, 163, 223, 0.16);
         }
 
         button {
@@ -174,13 +227,17 @@
         .add-btn {
             min-height: 46px;
             padding: 12px 19px;
-            background-color: var(--main-red);
+            background-color: var(--main-blue);
             color: #ffffff;
             font-weight: 700;
         }
 
+        .add-btn:hover {
+            background-color: #3a96d2;
+        }
+
         .add-btn:active {
-            background-color: var(--dark-red);
+            background-color: var(--dark-blue);
             transform: scale(0.98);
         }
 
@@ -188,6 +245,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             margin: 5px 2px 10px;
         }
 
@@ -197,10 +255,13 @@
         }
 
         .item-count {
-            padding: 4px 9px;
+            padding: 4px 10px;
             border-radius: 14px;
-            background-color: var(--light-red);
-            color: var(--main-red);
+
+            background-color:
+                var(--light-blue);
+
+            color: var(--dark-blue);
             font-size: 13px;
             font-weight: 700;
         }
@@ -215,24 +276,32 @@
             display: flex;
             align-items: center;
             gap: 12px;
+
             margin-bottom: 10px;
             padding: 14px;
-            border-left: 5px solid var(--main-red);
+
+            border-left:
+                5px solid
+                var(--main-blue);
+
             border-radius: 10px;
             background-color: var(--card);
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.09);
+
+            box-shadow:
+                0 1px 5px
+                rgba(70, 130, 170, 0.12);
         }
 
         li.completed {
-            border-left-color: #bbbbbb;
-            background-color: #eeeeee;
+            border-left-color: #b7c4cc;
+            background-color: #f0f3f5;
         }
 
         .check-box {
             width: 24px;
             height: 24px;
             flex-shrink: 0;
-            accent-color: var(--main-red);
+            accent-color: var(--main-blue);
         }
 
         .item-information {
@@ -256,9 +325,13 @@
         .item-quantity {
             display: inline-block;
             padding: 3px 9px;
+
             border-radius: 12px;
-            background-color: var(--light-red);
-            color: var(--main-red);
+
+            background-color:
+                var(--light-blue);
+
+            color: var(--dark-blue);
             font-size: 14px;
             font-weight: 700;
         }
@@ -276,7 +349,7 @@
         }
 
         .completed .item-quantity {
-            background-color: #dddddd;
+            background-color: #dde3e7;
             color: #888888;
         }
 
@@ -292,16 +365,27 @@
             font-size: 14px;
         }
 
+        .delete-btn:hover {
+            background-color: #53626c;
+        }
+
         .delete-btn:active {
-            background-color: #333333;
+            background-color: #3c484f;
         }
 
         .empty-message {
             margin-top: 25px;
             padding: 28px 14px;
-            border: 2px dashed #cccccc;
+
+            border:
+                2px dashed
+                #b9d9ed;
+
             border-radius: 12px;
-            background-color: #fafafa;
+
+            background-color:
+                var(--very-light-blue);
+
             color: var(--sub-text);
             text-align: center;
         }
@@ -315,14 +399,16 @@
         .footer {
             margin-top: 28px;
             padding-bottom: 12px;
-            color: #999999;
+            color: #8ba0ad;
             text-align: center;
             font-size: 12px;
         }
 
         @media (max-width: 620px) {
             .input-area {
-                grid-template-columns: minmax(0, 1fr) 105px;
+                grid-template-columns:
+                    minmax(0, 1fr)
+                    105px;
             }
 
             #userInput {
@@ -366,10 +452,15 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="header-icon">🐶</div>
+            <div class="header-icon">
+                🐶
+            </div>
 
             <div>
-                <h1>山岸家 買い物メモ</h1>
+                <h1>
+                    山岸家 買い物メモ
+                </h1>
+
                 <p class="subtitle">
                     家族みんなの買い物リスト
                 </p>
@@ -404,10 +495,21 @@
                     id="userInput"
                     aria-label="登録者"
                 >
-                    <option value="一樹">一樹</option>
-                    <option value="和佳">和佳</option>
-                    <option value="陽多希">陽多希</option>
-                    <option value="旺佑">旺佑</option>
+                    <option value="一樹">
+                        一樹
+                    </option>
+
+                    <option value="和佳">
+                        和佳
+                    </option>
+
+                    <option value="陽多希">
+                        陽多希
+                    </option>
+
+                    <option value="旺佑">
+                        旺佑
+                    </option>
                 </select>
 
                 <button
@@ -439,7 +541,10 @@
             id="emptyMessage"
             class="empty-message"
         >
-            <span class="empty-icon">🐾</span>
+            <span class="empty-icon">
+                🐾
+            </span>
+
             買うものはまだ登録されていません
         </div>
 
@@ -481,35 +586,52 @@
         function getToday() {
             const today = new Date();
 
-            const year = today.getFullYear();
+            const year =
+                today.getFullYear();
 
-            const month = String(
-                today.getMonth() + 1
-            ).padStart(2, "0");
+            const month =
+                String(
+                    today.getMonth() + 1
+                ).padStart(2, "0");
 
-            const day = String(
-                today.getDate()
-            ).padStart(2, "0");
+            const day =
+                String(
+                    today.getDate()
+                ).padStart(2, "0");
 
-            return year + "/" + month + "/" + day;
+            return (
+                year +
+                "/" +
+                month +
+                "/" +
+                day
+            );
         }
 
         function renderList() {
             const list =
-                document.getElementById("shoppingList");
+                document.getElementById(
+                    "shoppingList"
+                );
 
             const emptyMessage =
-                document.getElementById("emptyMessage");
+                document.getElementById(
+                    "emptyMessage"
+                );
 
             const itemCount =
-                document.getElementById("itemCount");
+                document.getElementById(
+                    "itemCount"
+                );
 
             list.innerHTML = "";
 
             const uncompletedCount =
-                items.filter(function (item) {
-                    return !item.checked;
-                }).length;
+                items.filter(
+                    function (item) {
+                        return !item.checked;
+                    }
+                ).length;
 
             itemCount.textContent =
                 uncompletedCount + "件";
@@ -521,133 +643,203 @@
 
             const sortedItems =
                 items
-                    .map(function (item, originalIndex) {
-                        return {
-                            item: item,
-                            originalIndex: originalIndex
-                        };
-                    })
-                    .sort(function (a, b) {
-                        return (
-                            Number(a.item.checked) -
-                            Number(b.item.checked)
+                    .map(
+                        function (
+                            item,
+                            originalIndex
+                        ) {
+                            return {
+                                item: item,
+                                originalIndex:
+                                    originalIndex
+                            };
+                        }
+                    )
+                    .sort(
+                        function (a, b) {
+                            return (
+                                Number(
+                                    a.item.checked
+                                ) -
+                                Number(
+                                    b.item.checked
+                                )
+                            );
+                        }
+                    );
+
+            sortedItems.forEach(
+                function (entry) {
+                    const item =
+                        entry.item;
+
+                    const index =
+                        entry.originalIndex;
+
+                    const listItem =
+                        document.createElement(
+                            "li"
                         );
-                    });
 
-            sortedItems.forEach(function (entry) {
-                const item = entry.item;
-                const index = entry.originalIndex;
-
-                const listItem =
-                    document.createElement("li");
-
-                if (item.checked) {
-                    listItem.classList.add("completed");
-                }
-
-                const checkBox =
-                    document.createElement("input");
-
-                checkBox.type = "checkbox";
-                checkBox.className = "check-box";
-                checkBox.checked = Boolean(item.checked);
-
-                checkBox.setAttribute(
-                    "aria-label",
-                    item.name + "を購入済みにする"
-                );
-
-                checkBox.addEventListener(
-                    "change",
-                    function () {
-                        toggleItem(index);
+                    if (item.checked) {
+                        listItem.classList.add(
+                            "completed"
+                        );
                     }
-                );
 
-                const itemInformation =
-                    document.createElement("div");
+                    const checkBox =
+                        document.createElement(
+                            "input"
+                        );
 
-                itemInformation.className =
-                    "item-information";
+                    checkBox.type =
+                        "checkbox";
 
-                const itemNameLine =
-                    document.createElement("div");
+                    checkBox.className =
+                        "check-box";
 
-                itemNameLine.className =
-                    "item-name-line";
+                    checkBox.checked =
+                        Boolean(
+                            item.checked
+                        );
 
-                const itemName =
-                    document.createElement("div");
+                    checkBox.setAttribute(
+                        "aria-label",
+                        item.name +
+                        "を購入済みにする"
+                    );
 
-                itemName.className = "item-name";
-                itemName.textContent = item.name;
+                    checkBox.addEventListener(
+                        "change",
+                        function () {
+                            toggleItem(index);
+                        }
+                    );
 
-                itemNameLine.appendChild(itemName);
+                    const itemInformation =
+                        document.createElement(
+                            "div"
+                        );
 
-                if (item.quantity) {
-                    const itemQuantity =
-                        document.createElement("span");
+                    itemInformation.className =
+                        "item-information";
 
-                    itemQuantity.className =
-                        "item-quantity";
+                    const itemNameLine =
+                        document.createElement(
+                            "div"
+                        );
 
-                    itemQuantity.textContent =
-                        "必要数：" + item.quantity;
+                    itemNameLine.className =
+                        "item-name-line";
+
+                    const itemName =
+                        document.createElement(
+                            "div"
+                        );
+
+                    itemName.className =
+                        "item-name";
+
+                    itemName.textContent =
+                        item.name;
 
                     itemNameLine.appendChild(
-                        itemQuantity
+                        itemName
+                    );
+
+                    if (item.quantity) {
+                        const itemQuantity =
+                            document.createElement(
+                                "span"
+                            );
+
+                        itemQuantity.className =
+                            "item-quantity";
+
+                        itemQuantity.textContent =
+                            "必要数：" +
+                            item.quantity;
+
+                        itemNameLine.appendChild(
+                            itemQuantity
+                        );
+                    }
+
+                    const itemDetails =
+                        document.createElement(
+                            "div"
+                        );
+
+                    itemDetails.className =
+                        "item-details";
+
+                    const userName =
+                        item.user ||
+                        "未入力";
+
+                    const inputDate =
+                        item.createdDate ||
+                        "記録なし";
+
+                    itemDetails.textContent =
+                        "登録者：" +
+                        userName +
+                        "　入力日：" +
+                        inputDate;
+
+                    const deleteButton =
+                        document.createElement(
+                            "button"
+                        );
+
+                    deleteButton.type =
+                        "button";
+
+                    deleteButton.className =
+                        "delete-btn";
+
+                    deleteButton.textContent =
+                        "削除";
+
+                    deleteButton.addEventListener(
+                        "click",
+                        function () {
+                            deleteItem(index);
+                        }
+                    );
+
+                    itemInformation.appendChild(
+                        itemNameLine
+                    );
+
+                    itemInformation.appendChild(
+                        itemDetails
+                    );
+
+                    listItem.appendChild(
+                        checkBox
+                    );
+
+                    listItem.appendChild(
+                        itemInformation
+                    );
+
+                    listItem.appendChild(
+                        deleteButton
+                    );
+
+                    list.appendChild(
+                        listItem
                     );
                 }
-
-                const itemDetails =
-                    document.createElement("div");
-
-                itemDetails.className =
-                    "item-details";
-
-                const userName =
-                    item.user || "未入力";
-
-                const inputDate =
-                    item.createdDate || "記録なし";
-
-                itemDetails.textContent =
-                    "登録者：" + userName +
-                    "　入力日：" + inputDate;
-
-                const deleteButton =
-                    document.createElement("button");
-
-                deleteButton.type = "button";
-                deleteButton.className = "delete-btn";
-                deleteButton.textContent = "削除";
-
-                deleteButton.addEventListener(
-                    "click",
-                    function () {
-                        deleteItem(index);
-                    }
-                );
-
-                itemInformation.appendChild(
-                    itemNameLine
-                );
-
-                itemInformation.appendChild(
-                    itemDetails
-                );
-
-                listItem.appendChild(checkBox);
-                listItem.appendChild(itemInformation);
-                listItem.appendChild(deleteButton);
-
-                list.appendChild(listItem);
-            });
+            );
         }
 
         function addItem() {
             const itemInput =
-                document.getElementById("itemInput");
+                document.getElementById(
+                    "itemInput"
+                );
 
             const quantityInput =
                 document.getElementById(
@@ -655,7 +847,9 @@
                 );
 
             const userInput =
-                document.getElementById("userInput");
+                document.getElementById(
+                    "userInput"
+                );
 
             const name =
                 itemInput.value.trim();
@@ -667,7 +861,10 @@
                 userInput.value;
 
             if (name === "") {
-                alert("買うものを入力してください");
+                alert(
+                    "買うものを入力してください"
+                );
+
                 itemInput.focus();
                 return;
             }
@@ -703,7 +900,8 @@
 
             const shouldDelete =
                 confirm(
-                    "「" + itemName +
+                    "「" +
+                    itemName +
                     "」を削除しますか？"
                 );
 
@@ -718,43 +916,66 @@
         }
 
         document
-            .getElementById("addButton")
-            .addEventListener("click", addItem);
+            .getElementById(
+                "addButton"
+            )
+            .addEventListener(
+                "click",
+                addItem
+            );
 
         document
-            .getElementById("itemInput")
+            .getElementById(
+                "itemInput"
+            )
             .addEventListener(
                 "keydown",
                 function (event) {
-                    if (event.key === "Enter") {
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
                         addItem();
                     }
                 }
             );
 
         document
-            .getElementById("quantityInput")
+            .getElementById(
+                "quantityInput"
+            )
             .addEventListener(
                 "keydown",
                 function (event) {
-                    if (event.key === "Enter") {
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
                         addItem();
                     }
                 }
             );
 
-        if ("serviceWorker" in navigator) {
+        if (
+            "serviceWorker" in
+            navigator
+        ) {
             window.addEventListener(
                 "load",
                 function () {
-                    navigator.serviceWorker
-                        .register("./service-worker.js")
-                        .catch(function (error) {
-                            console.error(
-                                "PWAの登録に失敗しました",
-                                error
-                            );
-                        });
+                    navigator
+                        .serviceWorker
+                        .register(
+                            "./service-worker.js"
+                        )
+                        .catch(
+                            function (error) {
+                                console.error(
+                                    "PWAの登録に失敗しました",
+                                    error
+                                );
+                            }
+                        );
                 }
             );
         }
