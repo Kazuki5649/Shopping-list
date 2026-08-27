@@ -133,6 +133,7 @@ onchange="toggleItem(${index})"
  
 <span class="${item.checked ? 'completed' : ''}">
 ${item.name}
+(${item.user})
 </span>
  
 <button
@@ -148,20 +149,33 @@ list.appendChild(li);
 }
  
 function addItem() {
-const input = document.getElementById('itemInput');
-const name = input.value.trim();
+ 
+const itemInput =
+document.getElementById('itemInput');
+ 
+const userInput =
+document.getElementById('userInput');
+ 
+const name =
+itemInput.value.trim();
+ 
+const user =
+userInput.value.trim();
  
 if (!name) return;
  
 items.push({
 name: name,
+user: user,
 checked: false
 });
  
 saveItems();
 renderList();
  
-input.value = '';
+itemInput.value = '';
+userInput.value = '';
+}
 input.focus();
 }
  
