@@ -29,7 +29,7 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
         }
 
@@ -41,7 +41,7 @@
 
         .input-area {
             display: grid;
-            grid-template-columns: 1fr 140px auto;
+            grid-template-columns: 1fr 110px 120px auto;
             gap: 8px;
             margin-bottom: 20px;
         }
@@ -110,14 +110,30 @@
             flex: 1;
         }
 
+        .item-name-line {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
         .item-name {
             overflow-wrap: anywhere;
             font-size: 17px;
-            font-weight: 500;
+            font-weight: 600;
+        }
+
+        .item-quantity {
+            padding: 3px 8px;
+            border-radius: 12px;
+            background-color: #eaf3ff;
+            color: #0066cc;
+            font-size: 14px;
+            font-weight: 600;
         }
 
         .item-details {
-            margin-top: 4px;
+            margin-top: 5px;
             color: #777777;
             font-size: 13px;
             line-height: 1.5;
@@ -126,6 +142,11 @@
         .completed .item-name {
             color: #999999;
             text-decoration: line-through;
+        }
+
+        .completed .item-quantity {
+            background-color: #eeeeee;
+            color: #999999;
         }
 
         .completed .item-details {
@@ -140,13 +161,17 @@
             font-size: 14px;
         }
 
+        .delete-btn:active {
+            background-color: #d93027;
+        }
+
         .empty-message {
             margin-top: 30px;
             color: #777777;
             text-align: center;
         }
 
-        @media (max-width: 520px) {
+        @media (max-width: 600px) {
             body {
                 padding: 14px;
             }
@@ -156,12 +181,31 @@
             }
 
             .input-area {
-                grid-template-columns: 1fr 110px;
+                grid-template-columns: 1fr 100px;
+            }
+
+            #userInput {
+                grid-column: 1 / 2;
             }
 
             .add-btn {
-                grid-column: 1 / -1;
+                grid-column: 2 / 3;
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 21px;
+            }
+
+            .input-area {
+                grid-template-columns: 1fr;
+            }
+
+            #userInput,
+            .add-btn {
+                grid-column: 1;
             }
         }
     </style>
@@ -177,6 +221,14 @@
                 id="itemInput"
                 placeholder="買うもの"
                 maxlength="50"
+                autocomplete="off"
+            >
+
+            <input
+                type="text"
+                id="quantityInput"
+                placeholder="必要数"
+                maxlength="15"
                 autocomplete="off"
             >
 
@@ -277,7 +329,7 @@
 
                 checkBox.type = "checkbox";
                 checkBox.className = "check-box";
-                checkBox.checked = item.checked;
+                checkBox.checked = Boolean(item.checked);
 
                 checkBox.addEventListener(
                     "change",
@@ -292,11 +344,32 @@
                 itemInformation.className =
                     "item-information";
 
+                const itemNameLine =
+                    document.createElement("div");
+
+                itemNameLine.className =
+                    "item-name-line";
+
                 const itemName =
                     document.createElement("div");
 
                 itemName.className = "item-name";
                 itemName.textContent = item.name;
+
+                itemNameLine.appendChild(itemName);
+
+                if (item.quantity) {
+                    const itemQuantity =
+                        document.createElement("span");
+
+                    itemQuantity.className =
+                        "item-quantity";
+
+                    itemQuantity.textContent =
+                        "必要数：" + item.quantity;
+
+                    itemNameLine.appendChild(itemQuantity);
+                }
 
                 const itemDetails =
                     document.createElement("div");
@@ -327,7 +400,7 @@
                     }
                 );
 
-                itemInformation.appendChild(itemName);
+                itemInformation.appendChild(itemNameLine);
                 itemInformation.appendChild(itemDetails);
 
                 listItem.appendChild(checkBox);
@@ -342,11 +415,20 @@
             const itemInput =
                 document.getElementById("itemInput");
 
+            const quantityInput =
+                document.getElementById("quantityInput");
+
             const userInput =
                 document.getElementById("userInput");
 
-            const name = itemInput.value.trim();
-            const user = userInput.value;
+            const name =
+                itemInput.value.trim();
+
+            const quantity =
+                quantityInput.value.trim();
+
+            const user =
+                userInput.value;
 
             if (name === "") {
                 alert("買うものを入力してください");
@@ -356,6 +438,7 @@
 
             items.push({
                 name: name,
+                quantity: quantity,
                 user: user,
                 createdDate: getToday(),
                 checked: false
@@ -365,6 +448,8 @@
             renderList();
 
             itemInput.value = "";
+            quantityInput.value = "";
+
             itemInput.focus();
         }
 
@@ -377,6 +462,19 @@
         }
 
         function deleteItem(index) {
+            const itemName =
+                items[index].name;
+
+            const shouldDelete =
+                confirm(
+                    "「" + itemName +
+                    "」を削除しますか？"
+                );
+
+            if (!shouldDelete) {
+                return;
+            }
+
             items.splice(index, 1);
 
             saveItems();
@@ -389,6 +487,17 @@
 
         document
             .getElementById("itemInput")
+            .addEventListener(
+                "keydown",
+                function (event) {
+                    if (event.key === "Enter") {
+                        addItem();
+                    }
+                }
+            );
+
+        document
+            .getElementById("quantityInput")
             .addEventListener(
                 "keydown",
                 function (event) {
