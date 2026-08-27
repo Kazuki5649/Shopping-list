@@ -106,4 +106,277 @@
         }
 
         .item-information {
-            min-width
+            min-width: 0;
+            flex: 1;
+        }
+
+        .item-name {
+            overflow-wrap: anywhere;
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        .registered-by {
+            margin-top: 3px;
+            color: #777777;
+            font-size: 13px;
+        }
+
+        .completed .item-name {
+            color: #999999;
+            text-decoration: line-through;
+        }
+
+        .completed .registered-by {
+            color: #aaaaaa;
+        }
+
+        .delete-btn {
+            flex-shrink: 0;
+            padding: 9px 12px;
+            background-color: #ff3b30;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .empty-message {
+            margin-top: 30px;
+            color: #777777;
+            text-align: center;
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .input-area {
+                grid-template-columns: 1fr 110px;
+            }
+
+            .add-btn {
+                grid-column: 1 / -1;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>🛒 家族の買い物リスト</h1>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="itemInput"
+                placeholder="買うもの"
+                maxlength="50"
+                autocomplete="off"
+            >
+
+            <select
+                id="userInput"
+                aria-label="登録者"
+            >
+                <option value="一樹">一樹</option>
+                <option value="和佳">和佳</option>
+                <option value="陽多希">陽多希</option>
+                <option value="旺佑">旺佑</option>
+            </select>
+
+            <button
+                type="button"
+                class="add-btn"
+                id="addButton"
+            >
+                追加
+            </button>
+        </div>
+
+        <ul id="shoppingList"></ul>
+
+        <p
+            id="emptyMessage"
+            class="empty-message"
+        >
+            買うものはまだ登録されていません
+        </p>
+    </main>
+
+    <script>
+        const storageKey = "shoppingList";
+
+        let items = loadItems();
+
+        function loadItems() {
+            try {
+                const savedItems =
+                    localStorage.getItem(storageKey);
+
+                return savedItems
+                    ? JSON.parse(savedItems)
+                    : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveItems() {
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(items)
+            );
+        }
+
+        function renderList() {
+            const list =
+                document.getElementById("shoppingList");
+
+            const emptyMessage =
+                document.getElementById("emptyMessage");
+
+            list.innerHTML = "";
+
+            emptyMessage.style.display =
+                items.length === 0
+                    ? "block"
+                    : "none";
+
+            items.forEach(function (item, index) {
+                const listItem =
+                    document.createElement("li");
+
+                if (item.checked) {
+                    listItem.classList.add("completed");
+                }
+
+                const checkBox =
+                    document.createElement("input");
+
+                checkBox.type = "checkbox";
+                checkBox.className = "check-box";
+                checkBox.checked = item.checked;
+
+                checkBox.addEventListener(
+                    "change",
+                    function () {
+                        toggleItem(index);
+                    }
+                );
+
+                const itemInformation =
+                    document.createElement("div");
+
+                itemInformation.className =
+                    "item-information";
+
+                const itemName =
+                    document.createElement("div");
+
+                itemName.className = "item-name";
+                itemName.textContent = item.name;
+
+                const registeredBy =
+                    document.createElement("div");
+
+                registeredBy.className =
+                    "registered-by";
+
+                registeredBy.textContent =
+                    item.user
+                        ? "登録者：" + item.user
+                        : "登録者：未入力";
+
+                const deleteButton =
+                    document.createElement("button");
+
+                deleteButton.type = "button";
+                deleteButton.className = "delete-btn";
+                deleteButton.textContent = "削除";
+
+                deleteButton.addEventListener(
+                    "click",
+                    function () {
+                        deleteItem(index);
+                    }
+                );
+
+                itemInformation.appendChild(itemName);
+                itemInformation.appendChild(registeredBy);
+
+                listItem.appendChild(checkBox);
+                listItem.appendChild(itemInformation);
+                listItem.appendChild(deleteButton);
+
+                list.appendChild(listItem);
+            });
+        }
+
+        function addItem() {
+            const itemInput =
+                document.getElementById("itemInput");
+
+            const userInput =
+                document.getElementById("userInput");
+
+            const name = itemInput.value.trim();
+            const user = userInput.value;
+
+            if (name === "") {
+                alert("買うものを入力してください");
+                itemInput.focus();
+                return;
+            }
+
+            items.push({
+                name: name,
+                user: user,
+                checked: false
+            });
+
+            saveItems();
+            renderList();
+
+            itemInput.value = "";
+            itemInput.focus();
+        }
+
+        function toggleItem(index) {
+            items[index].checked =
+                !items[index].checked;
+
+            saveItems();
+            renderList();
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+
+            saveItems();
+            renderList();
+        }
+
+        document
+            .getElementById("addButton")
+            .addEventListener("click", addItem);
+
+        document
+            .getElementById("itemInput")
+            .addEventListener(
+                "keydown",
+                function (event) {
+                    if (event.key === "Enter") {
+                        addItem();
+                    }
+                }
+            );
+
+        renderList();
+    </script>
+</body>
+</html>
