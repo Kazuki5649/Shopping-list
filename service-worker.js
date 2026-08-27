@@ -1,5 +1,4 @@
-const cacheName =
-    "yamagishi-shopping-v2";
+const cacheName = "yamagishi-shopping-v3";
 
 const filesToCache = [
     "./",
@@ -13,13 +12,11 @@ self.addEventListener(
         event.waitUntil(
             caches
                 .open(cacheName)
-                .then(
-                    function (cache) {
-                        return cache.addAll(
-                            filesToCache
-                        );
-                    }
-                )
+                .then(function (cache) {
+                    return cache.addAll(
+                        filesToCache
+                    );
+                })
         );
 
         self.skipWaiting();
@@ -32,28 +29,24 @@ self.addEventListener(
         event.waitUntil(
             caches
                 .keys()
-                .then(
-                    function (
-                        cacheNames
-                    ) {
-                        return Promise.all(
-                            cacheNames.map(
-                                function (
-                                    currentCache
+                .then(function (cacheNames) {
+                    return Promise.all(
+                        cacheNames.map(
+                            function (currentCache) {
+                                if (
+                                    currentCache !==
+                                    cacheName
                                 ) {
-                                    if (
-                                        currentCache !==
-                                        cacheName
-                                    ) {
-                                        return caches.delete(
-                                            currentCache
-                                        );
-                                    }
+                                    return caches.delete(
+                                        currentCache
+                                    );
                                 }
-                            )
-                        );
-                    }
-                )
+
+                                return undefined;
+                            }
+                        )
+                    );
+                })
         );
 
         self.clients.claim();
@@ -64,42 +57,41 @@ self.addEventListener(
     "fetch",
     function (event) {
         if (
-            event.request.method !==
-            "GET"
+            event.request.method !== "GET"
         ) {
             return;
         }
 
         event.respondWith(
             fetch(event.request)
-                .then(
-                    function (response) {
-                        const responseCopy =
-                            response.clone();
-
-                        caches
-                            .open(cacheName)
-                            .then(
-                                function (
-                                    cache
-                                ) {
-                                    cache.put(
-                                        event.request,
-                                        responseCopy
-                                    );
-                                }
-                            );
-
+                .then(function (response) {
+                    if (
+                        !response ||
+                        response.status !== 200 ||
+                        response.type === "opaque"
+                    ) {
                         return response;
                     }
-                )
-                .catch(
-                    function () {
-                        return caches.match(
-                            event.request
-                        );
-                    }
-                )
+
+                    const responseCopy =
+                        response.clone();
+
+                    caches
+                        .open(cacheName)
+                        .then(function (cache) {
+                            cache.put(
+                                event.request,
+                                responseCopy
+                            );
+                        });
+
+                    return response;
+                })
+                .catch(function () {
+                    return caches.match(
+                        event.request
+                    );
+                })
         );
     }
 );
