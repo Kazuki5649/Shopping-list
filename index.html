@@ -1,208 +1,381 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>家族の買い物リスト</title>
- 
-<style>
-* {
-    box-sizing: border-box;
-}
- 
-body {
-font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-max-width: 600px;
-margin: 0 auto;
-padding: 20px;
-background: #f5f5f5;
-}
- 
-h1 {
-text-align: center;
-color: #333;
-}
- 
-.input-area {
-display: flex;
-gap: 10px;
-margin-bottom: 20px;
-}
- 
-input {
-flex: 1;
-padding: 12px;
-border: 1px solid #ccc;
-border-radius: 8px;
-font-size: 16px;
-}
- 
-button {
-padding: 12px 16px;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-}
- 
-.add-btn {
-background: #007aff;
-color: white;
-}
- 
-ul {
-list-style: none;
-padding: 0;
-}
- 
-li {
-background: white;
-padding: 12px;
-margin-bottom: 10px;
-border-radius: 8px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
- 
-.completed {
-text-decoration: line-through;
-color: gray;
-}
- 
-.delete-btn {
-margin-left: auto;
-background: #ff3b30;
-color: white;
-}
-</style>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>家族の買い物リスト</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333333;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 10px 0 24px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .input-area {
+            display: grid;
+            grid-template-columns: 1fr 140px auto;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            background-color: #ffffff;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007aff;
+            outline: 2px solid rgba(0, 122, 255, 0.2);
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-btn {
+            padding: 12px 18px;
+            background-color: #007aff;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .add-btn:active {
+            background-color: #005fc4;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 14px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .check-box {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .item-information {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .item-name {
+            overflow-wrap: anywhere;
+            font-size: 17px;
+        }
+
+        .registered-by {
+            margin-top: 3px;
+            color: #777777;
+            font-size: 13px;
+        }
+
+        .completed .item-name {
+            color: #999999;
+            text-decoration: line-through;
+        }
+
+        .completed .registered-by {
+            color: #aaaaaa;
+        }
+
+        .delete-btn {
+            flex-shrink: 0;
+            padding: 9px 12px;
+            background-color: #ff3b30;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .empty-message {
+            margin-top: 30px;
+            color: #777777;
+            text-align: center;
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .input-area {
+                grid-template-columns: 1fr 110px;
+            }
+
+            .add-btn {
+                grid-column: 1 / -1;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
- 
+
 <body>
- 
-<h1>🛒 家族の買い物リスト</h1>
- 
-<div class="input-area">
-<input
-type="text"
-id="itemInput"
-placeholder="買うもの"
->
- 
-<input
-type="text"
-id="userInput"
-placeholder="登録者"
->
- 
-<button class="add-btn" onclick="addItem()">追加</button>
-</div><div class="input-area">
-<input
-type="text"
-id="itemInput"
-placeholder="買うものを入力"
-maxlength="50"
->
-<button class="add-btn" onclick="addItem()">追加</button>
-</div>
- 
-<ul id="shoppingList"></ul>
- 
-<script>
-let items = JSON.parse(localStorage.getItem('shoppingList')) || [];
- 
-function saveItems() {
-localStorage.setItem(
-'shoppingList',
-JSON.stringify(items)
-);
-}
- 
-function renderList() {
-const list = document.getElementById('shoppingList');
-list.innerHTML = '';
- 
-items.forEach((item, index) => {
-const li = document.createElement('li');
- 
-li.innerHTML = `
-<input
-type="checkbox"
-${item.checked ? 'checked' : ''}
-onchange="toggleItem(${index})"
->
- 
-<span class="${item.checked ? 'completed' : ''}">
-${item.name}
-(${item.user})
-</span>
- 
-<button
-class="delete-btn"
-onclick="deleteItem(${index})"
->
-削除
-</button>
-`;
- 
-list.appendChild(li);
-});
-}
- 
-function addItem() {
- 
-const itemInput =
-document.getElementById('itemInput');
- 
-const userInput =
-document.getElementById('userInput');
- 
-const name =
-itemInput.value.trim();
- 
-const user =
-userInput.value.trim();
- 
-if (!name) return;
- 
-items.push({
-name: name,
-user: user,
-checked: false
-});
- 
-saveItems();
-renderList();
- 
-itemInput.value = '';
-userInput.value = '';
-}
-input.focus();
-}
- 
-function toggleItem(index) {
-items[index].checked = !items[index].checked;
- 
-saveItems();
-renderList();
-}
- 
-function deleteItem(index) {
-items.splice(index, 1);
- 
-saveItems();
-renderList();
-}
- 
-document
-.getElementById('itemInput')
-.addEventListener('keypress', function(e) {
-if (e.key === 'Enter') {
-addItem();
-}
-});
- 
-renderList();
-</script>
- 
+    <main class="container">
+        <h1>🛒 家族の買い物リスト</h1>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="itemInput"
+                placeholder="買うもの"
+                maxlength="50"
+                autocomplete="off"
+            >
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="登録者"
+                maxlength="20"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                class="add-btn"
+                id="addButton"
+            >
+                追加
+            </button>
+        </div>
+
+        <ul id="shoppingList"></ul>
+
+        <p
+            id="emptyMessage"
+            class="empty-message"
+        >
+            買うものはまだ登録されていません
+        </p>
+    </main>
+
+    <script>
+        const storageKey = "shoppingList";
+
+        let items = loadItems();
+
+        function loadItems() {
+            try {
+                const savedItems = localStorage.getItem(storageKey);
+                return savedItems ? JSON.parse(savedItems) : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveItems() {
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(items)
+            );
+        }
+
+        function renderList() {
+            const list =
+                document.getElementById("shoppingList");
+
+            const emptyMessage =
+                document.getElementById("emptyMessage");
+
+            list.innerHTML = "";
+
+            emptyMessage.style.display =
+                items.length === 0 ? "block" : "none";
+
+            items.forEach(function (item, index) {
+                const listItem =
+                    document.createElement("li");
+
+                if (item.checked) {
+                    listItem.classList.add("completed");
+                }
+
+                const checkBox =
+                    document.createElement("input");
+
+                checkBox.type = "checkbox";
+                checkBox.className = "check-box";
+                checkBox.checked = item.checked;
+
+                checkBox.addEventListener(
+                    "change",
+                    function () {
+                        toggleItem(index);
+                    }
+                );
+
+                const itemInformation =
+                    document.createElement("div");
+
+                itemInformation.className =
+                    "item-information";
+
+                const itemName =
+                    document.createElement("div");
+
+                itemName.className = "item-name";
+                itemName.textContent = item.name;
+
+                const registeredBy =
+                    document.createElement("div");
+
+                registeredBy.className =
+                    "registered-by";
+
+                registeredBy.textContent =
+                    item.user
+                        ? "登録者：" + item.user
+                        : "登録者：未入力";
+
+                const deleteButton =
+                    document.createElement("button");
+
+                deleteButton.type = "button";
+                deleteButton.className = "delete-btn";
+                deleteButton.textContent = "削除";
+
+                deleteButton.addEventListener(
+                    "click",
+                    function () {
+                        deleteItem(index);
+                    }
+                );
+
+                itemInformation.appendChild(itemName);
+                itemInformation.appendChild(registeredBy);
+
+                listItem.appendChild(checkBox);
+                listItem.appendChild(itemInformation);
+                listItem.appendChild(deleteButton);
+
+                list.appendChild(listItem);
+            });
+        }
+
+        function addItem() {
+            const itemInput =
+                document.getElementById("itemInput");
+
+            const userInput =
+                document.getElementById("userInput");
+
+            const name = itemInput.value.trim();
+            const user = userInput.value.trim();
+
+            if (name === "") {
+                alert("買うものを入力してください");
+                itemInput.focus();
+                return;
+            }
+
+            items.push({
+                name: name,
+                user: user,
+                checked: false
+            });
+
+            saveItems();
+            renderList();
+
+            itemInput.value = "";
+            itemInput.focus();
+        }
+
+        function toggleItem(index) {
+            items[index].checked =
+                !items[index].checked;
+
+            saveItems();
+            renderList();
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+
+            saveItems();
+            renderList();
+        }
+
+        document
+            .getElementById("addButton")
+            .addEventListener("click", addItem);
+
+        document
+            .getElementById("itemInput")
+            .addEventListener(
+                "keydown",
+                function (event) {
+                    if (event.key === "Enter") {
+                        addItem();
+                    }
+                }
+            );
+
+        document
+            .getElementById("userInput")
+            .addEventListener(
+                "keydown",
+                function (event) {
+                    if (event.key === "Enter") {
+                        addItem();
+                    }
+                }
+            );
+
+        renderList();
+    </script>
 </body>
 </html>
