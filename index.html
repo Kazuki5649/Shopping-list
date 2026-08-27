@@ -15,7 +15,7 @@
 
     <meta
         name="description"
-        content="山岸家で共有する買い物メモ"
+        content="山岸家で使う買い物メモ"
     >
 
     <meta
@@ -35,14 +35,11 @@
 
     ./manifest.json
 
-    ./icon-192.png
+    <title>山岸家 買い物メモ</title>
 
-    <link
-        rel="apple-touch-icon"
-        href="./icon-192.png"
-    >
-
-    <       --main-blue: #4aa3df;
+    <style>
+        :root {
+            --main-blue: #4aa3df;
             --dark-blue: #2e85c0;
             --light-blue: #e8f5ff;
             --very-light-blue: #f4faff;
@@ -318,10 +315,6 @@
             font-size: 14px;
         }
 
-        .delete-btn:hover {
-            background-color: #53626c;
-        }
-
         .delete-btn:active {
             background-color: #3c484f;
         }
@@ -398,9 +391,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="header-icon">
-                🐶
-            </div>
+            <div class="header-icon">🐶</div>
 
             <div>
                 <h1>山岸家 買い物メモ</h1>
@@ -474,10 +465,7 @@
             id="emptyMessage"
             class="empty-message"
         >
-            <span class="empty-icon">
-                🐾
-            </span>
-
+            <span class="empty-icon">🐾</span>
             買うものはまだ登録されていません
         </div>
 
@@ -496,8 +484,15 @@
                 const savedItems =
                     localStorage.getItem(storageKey);
 
-                return savedItems
-                    ? JSON.parse(savedItems)
+                if (savedItems === null) {
+                    return [];
+                }
+
+                const parsedItems =
+                    JSON.parse(savedItems);
+
+                return Array.isArray(parsedItems)
+                    ? parsedItems
                     : [];
             } catch (error) {
                 console.error(
@@ -510,10 +505,21 @@
         }
 
         function saveItems() {
-            localStorage.setItem(
-                storageKey,
-                JSON.stringify(items)
-            );
+            try {
+                localStorage.setItem(
+                    storageKey,
+                    JSON.stringify(items)
+                );
+            } catch (error) {
+                console.error(
+                    "データの保存に失敗しました",
+                    error
+                );
+
+                alert(
+                    "データを保存できませんでした"
+                );
+            }
         }
 
         function getToday() {
@@ -568,18 +574,16 @@
 
             const sortedItems =
                 items
-                    .map(
-                        function (
-                            item,
-                            originalIndex
-                        ) {
-                            return {
-                                item: item,
-                                originalIndex:
-                                    originalIndex
-                            };
-                        }
-                    )
+                    .map(function (
+                        item,
+                        originalIndex
+                    ) {
+                        return {
+                            item: item,
+                            originalIndex:
+                                originalIndex
+                        };
+                    })
                     .sort(function (a, b) {
                         return (
                             Number(a.item.checked) -
@@ -589,9 +593,7 @@
 
             sortedItems.forEach(
                 function (entry) {
-                    const item =
-                        entry.item;
-
+                    const item = entry.item;
                     const index =
                         entry.originalIndex;
 
@@ -609,7 +611,9 @@
                             "input"
                         );
 
-                    checkBox.type = "checkbox";
+                    checkBox.type =
+                        "checkbox";
+
                     checkBox.className =
                         "check-box";
 
@@ -654,7 +658,7 @@
                         "item-name";
 
                     itemName.textContent =
-                        item.name;
+                        item.name || "商品名なし";
 
                     itemNameLine.appendChild(
                         itemName
@@ -799,6 +803,10 @@
         }
 
         function toggleItem(index) {
+            if (!items[index]) {
+                return;
+            }
+
             items[index].checked =
                 !items[index].checked;
 
@@ -807,6 +815,10 @@
         }
 
         function deleteItem(index) {
+            if (!items[index]) {
+                return;
+            }
+
             const itemName =
                 items[index].name;
 
@@ -860,9 +872,15 @@
             window.addEventListener(
                 "load",
                 function () {
-                    navigator.serviceWorker
+                    navigator
+                        .serviceWorker
                         .register(
                             "./service-worker.js"
+                        )
+                        .then(
+                            function (registration) {
+                                registration.update();
+                            }
                         )
                         .catch(
                             function (error) {
